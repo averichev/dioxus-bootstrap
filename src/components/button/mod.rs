@@ -5,12 +5,20 @@ use dioxus::prelude::*;
 pub struct ButtonProps {
     variant: Option<ButtonVariant>,
     children: Element,
-    on_click: EventHandler<MouseEvent>
+    on_click: Option<EventHandler<MouseEvent>>,
+    class: Option<String>
 }
 
 #[component]
 pub fn Button(props: ButtonProps) -> Element {
     let mut class = String::from("btn");
+    match props.class {
+        None => {}
+        Some(nc) => {
+            class.push_str(" ");
+            class.push_str(nc.as_str());
+        }
+    }
     match props.variant {
         None => {}
         Some(variant) => {
@@ -45,10 +53,20 @@ pub fn Button(props: ButtonProps) -> Element {
             }
         }
     }
+    let on_click = move |evt: MouseEvent| {
+        match props.on_click {
+            None => {
+                evt.stop_propagation()
+            }
+            Some(handler) => {
+                handler.call(evt)
+            }
+        }
+    };
     rsx! {
         button{
             class,
-            onclick: move |evt| props.on_click.call(evt),
+            onclick: on_click,
             {props.children}
         }
     }
