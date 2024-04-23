@@ -1,5 +1,6 @@
 use dioxus::html::*;
 use dioxus::prelude::*;
+use dioxus::web::WebEventExt;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct ButtonProps {
