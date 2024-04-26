@@ -1,4 +1,5 @@
 use dioxus::html::*;
+use dioxus::html::button;
 use dioxus::prelude::*;
 use dioxus::web::WebEventExt;
 
@@ -7,7 +8,8 @@ pub struct ButtonProps {
     variant: Option<ButtonVariant>,
     children: Element,
     on_click: Option<EventHandler<MouseEvent>>,
-    class: Option<String>
+    class: Option<String>,
+    id: Option<String>
 }
 
 #[component]
@@ -66,9 +68,10 @@ pub fn Button(props: ButtonProps) -> Element {
     };
     rsx! {
         button{
+            id: props.id,
             class,
             onclick: on_click,
-            {props.children}
+            {props.children},
         }
     }
 }
