@@ -12,7 +12,7 @@ use dioxus::html::*;
 
 #[derive(Clone, Copy, Default)]
 pub struct DocumentClick {
-    target: Signal<Option<EventTarget>>,
+    target: Signal<Option<String>>,
 }
 
 #[derive(PartialEq, Clone, Props)]
@@ -22,7 +22,8 @@ pub struct DocumentListenerProps{
 
 #[component]
 pub fn DocumentListener(props: DocumentListenerProps) -> Element {
-    let mut click = use_context_provider(|| Signal::new(DocumentClick::default()));
+    use_context_provider(|| DocumentClick::default());
+    let mut click = use_context::<DocumentClick>();
     use_effect(move || {
         let document = web_sys::window().unwrap().document().unwrap();
         let closure = Closure::wrap(Box::new(move |evt: web_sys::MouseEvent| {
@@ -31,9 +32,11 @@ pub fn DocumentListener(props: DocumentListenerProps) -> Element {
             let target = evt.target().unwrap();
             let element = target.dyn_into::<web_sys::Element>().unwrap();
             if let Some(data_id) = element.get_attribute("id") {
-                console::log_1(&format!("id:{}", data_id).into());
+                *click.target.write() = Some(data_id);
             }
-            //click.write().target = Signal::new(Some((evt))); // Вот тут
+            else {
+                *click.target.write() = None;
+            }
         }) as Box<dyn FnMut(_)>);
 
         document.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref()).unwrap();

@@ -12,9 +12,8 @@ pub struct DropdownProps {
 
 #[component]
 pub fn Dropdown(props: DropdownProps) -> Element {
-    //let click = consume_context::<DocumentClick>();
     let uid = Uuid::new_v4().to_string();
-    let click = use_context::<Signal<DocumentClick>>();
+    let click = use_context::<DocumentClick>();
     let mut show = use_signal(|| false);
     let mut class = String::from("dropdown-menu");
     if show() {
@@ -24,11 +23,11 @@ pub fn Dropdown(props: DropdownProps) -> Element {
     let on_click = move |_| {
         console::log_1(&JsValue::from_str("button clicked!".to_string().as_str()));
         show.toggle();
-        let r = click.read().target.read().clone();
-        match r {
+        let r = click.target.read();
+        match r.as_ref() {
             None => {}
             Some(s) => {
-                console::log_1(&s);
+                console::log_1(&JsValue::from_str(s.as_str()));
             }
         }
     };
