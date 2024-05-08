@@ -10,3 +10,4 @@ web-sys = {version = "0.3.69"}
 serde_json = "1.0.116"
 getrandom = { version = "0.2", features = ["js"] }
 uuid = { version = "1.8.0", features = ["v4"] }
+modx = "0.1.1"
