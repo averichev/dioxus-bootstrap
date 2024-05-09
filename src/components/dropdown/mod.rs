@@ -8,7 +8,7 @@ use web_sys::js_sys::Atomics::store;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct DropdownProps {
-    children: Element
+    children: Element,
 }
 
 #[component]
@@ -48,8 +48,13 @@ pub fn Dropdown(props: DropdownProps) -> Element {
 
     use_effect(move || {
         console::log_1(&JsValue::from_str(&format!("Detected change, new clicked ID: {:?}", store.value())));
+        if uid.to_string() == clicked().id {
+            console::log_1(&JsValue::from_str("равны"));
+        }
+        else {
+            show.set(false);
+        }
     });
-
 
 
     let on_click = move |_| {
