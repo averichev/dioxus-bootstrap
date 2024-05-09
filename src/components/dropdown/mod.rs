@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use wasm_bindgen::JsValue;
 use crate::components::button::Button;
-use crate::components::DocumentClick;
+use crate::components::{Clicked, DarkMode, DocumentClick};
 use web_sys::{console, EventTarget};
 use uuid::Uuid;
 use web_sys::js_sys::Atomics::store;
@@ -20,8 +20,6 @@ pub fn Dropdown(props: DropdownProps) -> Element {
     if show() {
         class.push_str(" show");
     }
-
-    let mut store = DocumentClick::new();
 
 
     //let click = use_context::<DocumentClick>().target;
@@ -43,6 +41,11 @@ pub fn Dropdown(props: DropdownProps) -> Element {
     //     };
     // });
 
+    let mut store = DocumentClick::new();
+    let dark_mode = use_context::<Signal<DarkMode>>();
+    let clicked = use_context::<Signal<Clicked>>();
+
+
     use_effect(move || {
         console::log_1(&JsValue::from_str(&format!("Detected change, new clicked ID: {:?}", store.value())));
     });
@@ -51,9 +54,13 @@ pub fn Dropdown(props: DropdownProps) -> Element {
 
     let on_click = move |_| {
         console::log_1(&JsValue::from_str("button clicked!".to_string().as_str()));
-        //store.set("fake id".to_string());
+        ////store.set("fake id".to_string());
         show.toggle();
     };
+    let style = if dark_mode().0 { "дарк" } else { "лайт" };
+    let style2 = store.target();
+    let id_clicked = clicked().id;
+
     rsx! {
         div{
             class: "dropdown",
@@ -74,7 +81,13 @@ pub fn Dropdown(props: DropdownProps) -> Element {
             },
         },
         div{
-            "value: {store.value()}"
+            "store value: {style2}"
+        },
+        div{
+            "мод: {style}"
+        },
+        div{
+            "clicked: {id_clicked}"
         }
     }
 }

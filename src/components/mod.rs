@@ -37,8 +37,19 @@ pub struct DocumentListenerProps {
     children: Element,
 }
 
+
+#[derive(Clone, Copy)]
+pub struct DarkMode(pub bool);
+
+#[derive(Clone)]
+pub struct Clicked{
+    id: String
+}
+
 #[component]
 pub fn DocumentListener(props: DocumentListenerProps) -> Element {
+    use_context_provider(|| Signal::new(DarkMode(false)));
+    let mut clicked = use_context_provider(|| Signal::new(Clicked{ id: "".to_string() }));
     let mut store = DocumentClick::new();
     use_effect(move || {
         let document = web_sys::window().unwrap().document().unwrap();
@@ -48,9 +59,11 @@ pub fn DocumentListener(props: DocumentListenerProps) -> Element {
             let target = evt.target().unwrap();
             let element = target.dyn_into::<web_sys::Element>().unwrap();
             if let Some(data_id) = element.get_attribute("id") {
-                store.set(data_id);
+                store.set(data_id.clone());
+                clicked.write().id = data_id;
             } else {
                 store.clear();
+                clicked.write().id = String::new();
             }
         }) as Box<dyn FnMut(_)>);
         document.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref()).unwrap();
@@ -62,7 +75,7 @@ pub fn DocumentListener(props: DocumentListenerProps) -> Element {
     rsx! {
         {props.children},
         div{
-            "{store.value()}"
+            "store.value: {store.value()}"
         }
     }
 }
