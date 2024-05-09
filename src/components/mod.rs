@@ -14,25 +14,21 @@ use uuid::Uuid;
 
 #[modx::store]
 pub struct DocumentClick {
-    pub(crate) target: Option<String>,
+    pub target: String,
 }
 
 impl DocumentClick {
-    pub(crate) fn set(&mut self, target: String){
-        self.target.set(Some(target));
+    pub fn set(&mut self, target: String){
+        console::log_1(&"set id in store".into());
+        self.target.set(target);
     }
-    pub(crate) fn clear(&mut self){
-        self.target.set(None);
+    pub fn clear(&mut self){
+        console::log_1(&"clear".into());
+        self.target.set(String::new());
     }
-    pub(crate) fn value(&self) -> String {
-        match self.target.as_ref() {
-            None => {
-                String::new()
-            }
-            Some(n) => {
-                n.to_string()
-            }
-        }
+    pub fn value(&mut self) -> Signal<String> {
+        console::log_1(&"read value".into());
+        self.target
     }
 }
 
@@ -57,8 +53,16 @@ pub fn DocumentListener(props: DocumentListenerProps) -> Element {
                 store.clear();
             }
         }) as Box<dyn FnMut(_)>);
+        document.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref()).unwrap();
+        closure.forget();
+    });
+    use_effect(move || {
+        console::log_1(&JsValue::from_str(&format!("Detected change in DocumentListener, new clicked ID: {:?}", store.value())));
     });
     rsx! {
-        {props.children}
+        {props.children},
+        div{
+            "{store.value()}"
+        }
     }
 }

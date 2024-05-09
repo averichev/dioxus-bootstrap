@@ -4,6 +4,7 @@ use crate::components::button::Button;
 use crate::components::DocumentClick;
 use web_sys::{console, EventTarget};
 use uuid::Uuid;
+use web_sys::js_sys::Atomics::store;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct DropdownProps {
@@ -20,7 +21,7 @@ pub fn Dropdown(props: DropdownProps) -> Element {
         class.push_str(" show");
     }
 
-    let store = DocumentClick::new();
+    let mut store = DocumentClick::new();
 
 
     //let click = use_context::<DocumentClick>().target;
@@ -42,10 +43,15 @@ pub fn Dropdown(props: DropdownProps) -> Element {
     //     };
     // });
 
+    use_effect(move || {
+        console::log_1(&JsValue::from_str(&format!("Detected change, new clicked ID: {:?}", store.value())));
+    });
+
 
 
     let on_click = move |_| {
         console::log_1(&JsValue::from_str("button clicked!".to_string().as_str()));
+        //store.set("fake id".to_string());
         show.toggle();
     };
     rsx! {
