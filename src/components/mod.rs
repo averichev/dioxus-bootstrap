@@ -1,6 +1,7 @@
 pub mod button;
 pub mod dropdown;
 pub mod form_control;
+pub mod form;
 
 
 use std::cell::Ref;
