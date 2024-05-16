@@ -1,4 +1,4 @@
-mod dropdown_menu;
+pub mod dropdown_menu;
 
 use dioxus::prelude::*;
 use wasm_bindgen::JsValue;
@@ -11,6 +11,7 @@ use crate::components::dropdown::dropdown_menu::DropdownMenu;
 #[derive(PartialEq, Clone, Props)]
 pub struct DropdownProps {
     children: Element,
+    menu: Option<Element>
 }
 
 #[component]
@@ -39,7 +40,8 @@ pub fn Dropdown(props: DropdownProps) -> Element {
                 id: uid.to_string()
             },
             DropdownMenu{
-                show: Some(*show.read())
+                show: Some(*show.read()),
+                children: props.menu
             }
         },
     }
