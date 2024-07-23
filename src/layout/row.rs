@@ -1,4 +1,3 @@
-use dioxus::html::*;
 use dioxus::prelude::*;
 
 #[derive(PartialEq, Clone, Props)]

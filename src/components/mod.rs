@@ -3,15 +3,11 @@ pub mod dropdown;
 pub mod form;
 
 
-use std::cell::Ref;
 use dioxus::core_macro::component;
 use dioxus::hooks::use_effect;
 use dioxus::prelude::*;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
-use web_sys::{console, EventTarget};
-use dioxus::html::*;
-use uuid::Uuid;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct DocumentListenerProps {

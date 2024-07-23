@@ -25,7 +25,7 @@ pub fn FormRow(props: FormRowProps) -> Element {
     rsx! {
         div{
             class: "mb-3",
-            {label},
+            {label}
             FormControl{
                 r#type: FormControlType::Text,
                 id: id()
@@ -59,7 +59,7 @@ pub fn FormControl(props: FormControlProps) -> Element {
 
 fn get_class(control_size: Option<FormControlSize>) -> String {
     let mut class = String::from("form-control");
-    let t = match control_size {
+    let _t = match control_size {
         None => {}
         Some(n) => {
             match n {
