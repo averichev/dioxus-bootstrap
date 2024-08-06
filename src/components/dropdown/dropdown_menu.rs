@@ -23,6 +23,6 @@ pub fn DropdownMenu(props: DropdownMenuProps) -> Element {
         ul{
             class,
             {props.children}
-        },
+        }
     }
 }

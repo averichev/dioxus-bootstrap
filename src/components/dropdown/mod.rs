@@ -1,6 +1,7 @@
 pub mod dropdown_menu;
 
 use dioxus::prelude::*;
+use serde_json::Value::String;
 use crate::components::button::Button;
 use crate::components::{Clicked, DarkMode};
 use uuid::Uuid;
@@ -14,34 +15,19 @@ pub struct DropdownProps {
 
 #[component]
 pub fn Dropdown(props: DropdownProps) -> Element {
-    let uid = use_memo(Uuid::new_v4);
-    let mut show = use_signal(|| false);
-
-    let _dark_mode = use_context::<Signal<DarkMode>>();
-    let clicked = use_context::<Signal<Clicked>>();
-    use_effect(move || {
-        if uid.to_string() == clicked().id {} else {
-            show.set(false);
-        }
-    });
-    let on_click = move |_| {
-        show.toggle();
-    };
-    let _id_clicked = clicked().id;
+    let uid = use_re(|| Uuid::new_v4().to_string());
     rsx! {
         div{
             class: "dropdown",
             Button{
                 class: "dropdown-toggle",
-                on_click,
                 id: uid.to_string(),
                 {props.children}
             }
             DropdownMenu{
-                show: Some(*show.read()),
                 children: props.menu
             }
-        },
+        }
     }
 }
 

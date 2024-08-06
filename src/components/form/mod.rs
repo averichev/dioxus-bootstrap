@@ -17,7 +17,7 @@ pub fn FormRow(props: FormRowProps) -> Element {
         Some(l) => {rsx!{
             label{
                 class: "form-label",
-                r#for: id(),
+                r#for: "dasdas",
                 {l}
             }
         }}
@@ -28,7 +28,7 @@ pub fn FormRow(props: FormRowProps) -> Element {
             {label}
             FormControl{
                 r#type: FormControlType::Text,
-                id: id()
+                id: "dasdas"
             }
         }
         {props.children}
