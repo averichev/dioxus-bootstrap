@@ -36,7 +36,7 @@ pub fn Dropdown(props: DropdownProps) -> Element {
                     debug!("uid {}", callback_uid);
                     debug!("is opened: {}", *show.read());
                     if *show.read() == true {
-                        *show.write() = false;
+                        //*show.write() = false;
                     }
                 } else {
                     debug!("id is NOT equal to uid");
@@ -46,6 +46,7 @@ pub fn Dropdown(props: DropdownProps) -> Element {
                 }
             } else {
                 debug!("Clicked on an element without id");
+                *show.write() = false;
             }
         })
     };
@@ -56,6 +57,7 @@ pub fn Dropdown(props: DropdownProps) -> Element {
     });
 
     let on_click = move |_| {
+        debug!("on click");
         show.toggle();
     };
 
