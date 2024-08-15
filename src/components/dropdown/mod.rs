@@ -19,8 +19,7 @@ pub struct DropdownProps {
 pub fn Dropdown(props: DropdownProps) -> Element {
     let uid = use_uid_generator();
     let mut show = use_signal(|| false);
-    let uid_string = uid.to_string();
-    use_autoclose(show.clone(), uid_string.clone());
+    use_autoclose(show.clone(), uid().to_string());
     let on_click = move |_| {
         show.toggle();
     };
@@ -31,7 +30,7 @@ pub fn Dropdown(props: DropdownProps) -> Element {
             Button{
                 class: "dropdown-toggle",
                 on_click,
-                id: uid_string,
+                id: uid().to_string(),
                 {props.children}
             }
             DropdownMenu{
