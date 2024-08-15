@@ -1,10 +1,47 @@
 use dioxus::prelude::*;
+use uuid::Uuid;
+
+#[derive(PartialEq, Clone, Props)]
+pub struct FormRowProps {
+    children: Option<Element>,
+    label: Option<String>
+}
+
+#[component]
+pub fn FormRow(props: FormRowProps) -> Element {
+    let _id = use_memo(move || Uuid::new_v4().to_string());
+    let label = match props.label {
+        None => {
+            rsx!{}
+        }
+        Some(l) => {rsx!{
+            label{
+                class: "form-label",
+                r#for: "dasdas",
+                {l}
+            }
+        }}
+    };
+    rsx! {
+        div{
+            class: "mb-3",
+            {label}
+            FormControl{
+                r#type: FormControlType::Text,
+                id: "dasdas"
+            }
+        }
+        {props.children}
+    }
+}
+
 
 #[derive(Clone, PartialEq, Props)]
 pub struct FormControlProps {
     r#type: Option<FormControlType>,
     size: Option<FormControlSize>,
     placeholder: Option<String>,
+    id: Option<String>
 }
 
 
@@ -14,14 +51,15 @@ pub fn FormControl(props: FormControlProps) -> Element {
         input {
             r#type: get_type(props.r#type),
             class: get_class(props.size),
-            placeholder: props.placeholder
+            placeholder: props.placeholder,
+            id: props.id
         }
     }
 }
 
 fn get_class(control_size: Option<FormControlSize>) -> String {
     let mut class = String::from("form-control");
-    let t = match control_size {
+    let _t = match control_size {
         None => {}
         Some(n) => {
             match n {

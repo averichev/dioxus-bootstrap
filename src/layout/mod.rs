@@ -1,7 +1,6 @@
 pub mod row;
 pub mod col;
 
-use dioxus::html::*;
 use dioxus::prelude::*;
 
 #[derive(PartialEq, Clone, Props)]

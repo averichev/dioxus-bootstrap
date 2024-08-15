@@ -1,7 +1,5 @@
 use dioxus::html::*;
-use dioxus::html::button;
 use dioxus::prelude::*;
-use dioxus::web::WebEventExt;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct ButtonProps {
@@ -71,7 +69,7 @@ pub fn Button(props: ButtonProps) -> Element {
             id: props.id,
             class,
             onclick: on_click,
-            {props.children},
+            {props.children}
         }
     }
 }
