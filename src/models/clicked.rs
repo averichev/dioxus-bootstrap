@@ -1,6 +1,5 @@
-use std::rc::Rc;
 use std::cell::RefCell;
-use std::slice::Iter;
+use std::rc::Rc;
 
 #[derive(Clone)]
 pub(crate) struct ClickListeners {
@@ -13,12 +12,10 @@ impl ClickListeners {
     }
 
     pub(crate) fn id(&self) -> Rc<RefCell<Vec<Box<dyn FnMut(Option<String>)>>>> {
-        // Здесь извлекаем неизменяемую ссылку из RefCell
         self.id.clone()
     }
 
     pub(crate) fn add_listener(&mut self, handler: Box<dyn FnMut(Option<String>)>) {
-        // Здесь изменяем содержимое через RefCell
         self.id.borrow_mut().push(handler);
     }
 }
