@@ -19,42 +19,49 @@ pub fn Dropdown(props: DropdownProps) -> Element {
     let uid = use_uid_generator();
     let mut show = use_signal(|| false);
     let uid_string = uid.to_string();
-
-    // Создаем мемоизированное замыкание, которое не принимает параметры
-    let cb = {
-        let mut show = show.clone();
-        let callback_uid = uid_string.clone();
-
-        use_callback(move || {
-            // Этот код будет выполнен при вызове cb()
-            // Вы можете передать параметры через capture
-            if let Some(id) = Some(callback_uid.clone()) {
-                debug!("Clicked element id: {}", id);
-                if id == callback_uid {
-                    debug!("id is equal to uid");
-                    debug!("id {}", id);
-                    debug!("uid {}", callback_uid);
-                    debug!("is opened: {}", *show.read());
+    let mut listener = use_document_click_listener();
+    use_hook(move || {
+        let cur_scope = current_scope_id().unwrap();
+        let rt = Runtime::current().unwrap();
+        listener.add_listener(Box::new(move |id: Option<String>| {
+            rt.on_scope(cur_scope, || {
+                debug!("Updating resources!!");
+                debug!("{:?}", id);
+                if id == None {
+                    debug!("id is None {:?}", id);
                     if *show.read() == true {
-                        //*show.write() = false;
+                        debug!("is Opened");
+                        show.toggle();
                     }
-                } else {
-                    debug!("id is NOT equal to uid");
-                    debug!("id {}", id);
-                    debug!("uid {}", callback_uid);
-                    *show.write() = false;
                 }
-            } else {
-                debug!("Clicked on an element without id");
-                *show.write() = false;
-            }
-        })
-    };
+            })
+        }));
+    });
+
+    let cb = use_callback(move || {
+        debug!("use_callback");
+    });
+
+
+    // let cb = {
+    //     let mut show = show.clone();
+    //     let callback_uid = uid_string.clone();
+    // };
 
     // Оборачиваем вызов колбэка в замыкание, которое передается в `use_document_click_listener`
-    use_document_click_listener(move |id| {
-        cb();  // Просто вызываем cb, параметры можно передать через closure capture
-    });
+    // use_document_click_listener({
+    //     move |id| {
+    //         debug!("handler {:?}", id);
+    //         // use_callback(move || {
+    //         //     debug!("use_callback {:?}", id);
+    //         // }).call(); // этот код работает
+    //         cb.call();
+    //         //state.handler(id).call(); // вот этот код вызывает панику
+    //     }
+    // });
+
+
+
 
     let on_click = move |_| {
         debug!("on click");

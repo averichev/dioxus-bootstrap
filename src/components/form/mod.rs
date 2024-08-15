@@ -9,7 +9,7 @@ pub struct FormRowProps {
 
 #[component]
 pub fn FormRow(props: FormRowProps) -> Element {
-    let id = use_memo(move || Uuid::new_v4().to_string());
+    let _id = use_memo(move || Uuid::new_v4().to_string());
     let label = match props.label {
         None => {
             rsx!{}
