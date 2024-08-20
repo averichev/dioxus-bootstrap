@@ -54,21 +54,22 @@ pub fn Button(props: ButtonProps) -> Element {
             }
         }
     }
-    let on_click = move |evt: MouseEvent| {
-        match props.on_click {
-            None => {
-                evt.stop_propagation()
-            }
-            Some(handler) => {
-                handler.call(evt)
-            }
-        }
-    };
+    // let on_click = move |evt: MouseEvent| {
+    //     match props.on_click {
+    //         None => {
+    //             evt.stop_propagation()
+    //         }
+    //         Some(handler) => {
+    //             handler.call(evt)
+    //         }
+    //     }
+    // };
     rsx! {
         button{
             id: props.id,
             class,
-            onclick: on_click,
+            //onclick: on_click,
+            r#type: "submit",
             {props.children}
         }
     }

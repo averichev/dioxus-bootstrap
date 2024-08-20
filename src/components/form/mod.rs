@@ -1,23 +1,47 @@
 use dioxus::prelude::*;
+use tracing::debug;
 use uuid::Uuid;
+use crate::hooks::uid_generator::use_uid_generator;
 
 #[derive(PartialEq, Clone, Props)]
-pub struct FormRowProps {
+pub struct FormProps {
     children: Option<Element>,
-    label: Option<String>
+    onsubmit: EventHandler<FormEvent>
 }
 
 #[component]
-pub fn FormRow(props: FormRowProps) -> Element {
-    let _id = use_memo(move || Uuid::new_v4().to_string());
+pub fn Form(props: FormProps) -> Element {
+    rsx! {
+        form{
+            onsubmit: move |event| {
+                debug!("Submitted! {event:?}");
+                debug!("{:?}", event.data());
+                props.onsubmit.call(event)
+            },
+            {props.children}
+        }
+    }
+}
+
+#[derive(PartialEq, Clone, Props)]
+pub struct FormFieldProps {
+    children: Option<Element>,
+    label: Option<String>,
+    name: Option<String>,
+    oninput: EventHandler<FormEvent>
+}
+
+#[component]
+pub fn FormField(props: FormFieldProps) -> Element {
+    let uid = use_uid_generator();
     let label = match props.label {
         None => {
-            rsx!{}
+            rsx! {}
         }
         Some(l) => {rsx!{
             label{
                 class: "form-label",
-                r#for: "dasdas",
+                r#for: uid().to_string(),
                 {l}
             }
         }}
@@ -28,10 +52,11 @@ pub fn FormRow(props: FormRowProps) -> Element {
             {label}
             FormControl{
                 r#type: FormControlType::Text,
-                id: "dasdas"
+                id: uid().to_string(),
+                name: props.name,
+                oninput: props.oninput
             }
         }
-        {props.children}
     }
 }
 
@@ -41,18 +66,26 @@ pub struct FormControlProps {
     r#type: Option<FormControlType>,
     size: Option<FormControlSize>,
     placeholder: Option<String>,
-    id: Option<String>
+    id: Option<String>,
+    name: Option<String>,
+    oninput: EventHandler<FormEvent>
 }
 
 
 #[component]
 pub fn FormControl(props: FormControlProps) -> Element {
+    let mut data = use_signal(|| "".to_string());
     rsx! {
         input {
             r#type: get_type(props.r#type),
             class: get_class(props.size),
             placeholder: props.placeholder,
-            id: props.id
+            id: props.id,
+            name: props.name,
+            oninput: move |event| props.oninput.call(event)
+        }
+        div{
+            {data}
         }
     }
 }
