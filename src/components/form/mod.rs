@@ -36,7 +36,7 @@ pub struct FormFieldProps {
 #[derive(PartialEq, Clone, Debug)]
 pub struct FormFieldError {
     pub code: String,
-    pub message: Option<String>,
+    pub message: String,
 }
 
 #[derive(PartialEq, Clone, Props)]
@@ -52,14 +52,7 @@ pub fn InvalidFeedback(props: InvalidFeedbackProps) -> Element {
             for error in props.errors {
                 div {
                     "data-code": error.code,
-                    match error.message{
-                        None => {
-                            ""
-                        }
-                        Some(s) => {
-                            "{s}"
-                        }
-                    }
+                    "{error.message}"
                 }
             }
         }
