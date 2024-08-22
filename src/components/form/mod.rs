@@ -6,7 +6,7 @@ use crate::hooks::uid_generator::use_uid_generator;
 #[derive(PartialEq, Clone, Props)]
 pub struct FormProps {
     children: Option<Element>,
-    onsubmit: EventHandler<FormEvent>
+    onsubmit: EventHandler<FormEvent>,
 }
 
 #[component]
@@ -28,7 +28,42 @@ pub struct FormFieldProps {
     children: Option<Element>,
     label: Option<String>,
     name: Option<String>,
-    oninput: EventHandler<FormEvent>
+    oninput: EventHandler<FormEvent>,
+    #[props(default = false)]
+    is_invalid: bool,
+}
+
+#[derive(PartialEq, Clone, Debug)]
+pub struct FormFieldError {
+    pub code: String,
+    pub message: Option<String>,
+}
+
+#[derive(PartialEq, Clone, Props)]
+pub struct InvalidFeedbackProps {
+    errors: Vec<FormFieldError>,
+}
+
+#[component]
+pub fn InvalidFeedback(props: InvalidFeedbackProps) -> Element {
+    rsx! {
+        div{
+            class: "invalid-feedback",
+            for error in props.errors {
+                div {
+                    "data-code": error.code,
+                    match error.message{
+                        None => {
+                            ""
+                        }
+                        Some(s) => {
+                            "{s}"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 #[component]
@@ -36,15 +71,17 @@ pub fn FormField(props: FormFieldProps) -> Element {
     let uid = use_uid_generator();
     let label = match props.label {
         None => {
-            rsx! {}
+            None
         }
-        Some(l) => {rsx!{
+        Some(l) => {
+            rsx! {
             label{
                 class: "form-label",
                 r#for: uid().to_string(),
                 {l}
             }
-        }}
+        }
+        }
     };
     rsx! {
         div{
@@ -54,7 +91,8 @@ pub fn FormField(props: FormFieldProps) -> Element {
                 r#type: FormControlType::Text,
                 id: uid().to_string(),
                 name: props.name,
-                oninput: props.oninput
+                oninput: props.oninput,
+                is_invalid: props.is_invalid
             }
         }
     }
@@ -68,7 +106,9 @@ pub struct FormControlProps {
     placeholder: Option<String>,
     id: Option<String>,
     name: Option<String>,
-    oninput: EventHandler<FormEvent>
+    oninput: EventHandler<FormEvent>,
+    #[props(default = false)]
+    is_invalid: bool,
 }
 
 
@@ -78,7 +118,7 @@ pub fn FormControl(props: FormControlProps) -> Element {
     rsx! {
         input {
             r#type: get_type(props.r#type),
-            class: get_class(props.size),
+            class: get_class(props.size, props.is_invalid),
             placeholder: props.placeholder,
             id: props.id,
             name: props.name,
@@ -90,9 +130,9 @@ pub fn FormControl(props: FormControlProps) -> Element {
     }
 }
 
-fn get_class(control_size: Option<FormControlSize>) -> String {
+fn get_class(control_size: Option<FormControlSize>, is_invalid: bool) -> String {
     let mut class = String::from("form-control");
-    let _t = match control_size {
+    match control_size {
         None => {}
         Some(n) => {
             match n {
@@ -106,6 +146,10 @@ fn get_class(control_size: Option<FormControlSize>) -> String {
             }
         }
     };
+
+    if is_invalid == true {
+        class.push_str(" is-invalid")
+    }
 
     class
 }

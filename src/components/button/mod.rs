@@ -7,7 +7,9 @@ pub struct ButtonProps {
     children: Element,
     on_click: Option<EventHandler<MouseEvent>>,
     class: Option<String>,
-    id: Option<String>
+    id: Option<String>,
+    #[props(default = false)]
+    disabled: bool
 }
 
 #[component]
@@ -70,6 +72,7 @@ pub fn Button(props: ButtonProps) -> Element {
             class,
             //onclick: on_click,
             r#type: "submit",
+            disabled: props.disabled,
             {props.children}
         }
     }
