@@ -23,7 +23,12 @@ pub fn FormControl(props: FormControlProps) -> Element {
             false
         }
         Some(ref v) => {
-            v.len() > 0
+            if *touched.read() == false {
+                false
+            }
+            else {
+                v.len() > 0
+            }
         }
     };
     rsx! {
