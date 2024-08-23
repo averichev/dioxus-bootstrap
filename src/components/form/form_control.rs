@@ -70,6 +70,9 @@ fn get_class(control_size: Option<FormControlSize>, is_invalid: bool) -> String 
     if is_invalid == true {
         class.push_str(" is-invalid")
     }
+    else {
+        class.push_str(" is-valid")
+    }
 
     class
 }
