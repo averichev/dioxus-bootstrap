@@ -16,7 +16,8 @@ pub struct FormControlProps {
 
 #[component]
 pub fn FormControl(props: FormControlProps) -> Element {
-    let mut data = use_signal(|| "".to_string());
+    let data = use_signal(|| "".to_string());
+    let mut touched = use_signal(|| false);
     let is_invalid = match props.errors {
         None => {
             false
@@ -32,7 +33,10 @@ pub fn FormControl(props: FormControlProps) -> Element {
             placeholder: props.placeholder,
             id: props.id,
             name: props.name,
-            oninput: move |event| props.oninput.call(event)
+            oninput: move |event| {
+                touched.set(true);
+                props.oninput.call(event);
+            }
         }
         InvalidFeedback{
             errors: props.errors
