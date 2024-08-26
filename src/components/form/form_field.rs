@@ -8,7 +8,9 @@ pub struct FormFieldProps {
     label: Option<String>,
     name: Option<String>,
     oninput: EventHandler<FormEvent>,
-    errors: Option<Vec<FormControlError>>
+    errors: Option<Vec<FormControlError>>,
+    #[props(default = false)]
+    readonly: bool,
 }
 
 #[component]
@@ -37,7 +39,8 @@ pub fn FormField(props: FormFieldProps) -> Element {
                 id: uid().to_string(),
                 name: props.name,
                 oninput: props.oninput,
-                errors: props.errors
+                errors: props.errors,
+                readonly: props.readonly,
             }
         }
     }

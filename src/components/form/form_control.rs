@@ -11,6 +11,8 @@ pub struct FormControlProps {
     name: Option<String>,
     oninput: EventHandler<FormEvent>,
     errors: Option<Vec<FormControlError>>,
+    #[props(default = false)]
+    readonly: bool,
 }
 
 
@@ -38,6 +40,7 @@ pub fn FormControl(props: FormControlProps) -> Element {
             placeholder: props.placeholder,
             id: props.id,
             name: props.name,
+            readonly: props.readonly,
             oninput: move |event| {
                 touched.set(true);
                 props.oninput.call(event);

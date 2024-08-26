@@ -9,7 +9,9 @@ pub struct ButtonProps {
     class: Option<String>,
     id: Option<String>,
     #[props(default = false)]
-    disabled: bool
+    disabled: bool,
+    #[props(default = false)]
+    processing: bool,
 }
 
 #[component]
@@ -66,6 +68,27 @@ pub fn Button(props: ButtonProps) -> Element {
     //         }
     //     }
     // };
+
+    let spinner = match props.processing {
+        true => {
+            rsx! {
+                span{
+                    class:"spinner-border spinner-border-sm me-1",
+                    "aria-hidden":"true"
+                }
+                span{
+                    "role": "status",
+                    "Loading..."
+                }
+            }
+        }
+        false => {
+            rsx! {
+                {props.children}
+            }
+        }
+    };
+
     rsx! {
         button{
             id: props.id,
@@ -73,13 +96,13 @@ pub fn Button(props: ButtonProps) -> Element {
             //onclick: on_click,
             r#type: "submit",
             disabled: props.disabled,
-            {props.children}
+            {spinner}
         }
     }
 }
 
 #[derive(PartialEq, Clone)]
-pub enum ButtonVariant{
+pub enum ButtonVariant {
     Primary,
     Secondary,
     Success,
@@ -88,5 +111,5 @@ pub enum ButtonVariant{
     Info,
     Light,
     Dark,
-    Link
+    Link,
 }
