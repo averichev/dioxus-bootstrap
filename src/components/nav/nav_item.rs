@@ -5,22 +5,28 @@ pub struct NavItemProps {
     children: Option<Element>,
     #[props(default = false)]
     disabled: bool,
-    to: IntoRoutable
+    to: IntoRoutable,
+}
+
+#[derive(PartialEq, Clone)]
+pub struct NavItem {
+    pub text: String,
+    pub to: IntoRoutable,
 }
 
 #[component]
-pub fn NavItem(props: NavItemProps) -> Element {
+pub(crate) fn NavItem(props: NavItemProps) -> Element {
     let mut link_class = String::from("nav-link");
     match props.disabled {
         true => link_class.push_str(" disabled"),
         _ => {}
     };
+    let route = props.to.clone();
     rsx! {
         li{
-            class: "nav-item",
+            class: link_class,
             Link{
-                class: link_class,
-                to: props.to,
+                to: route,
                 {props.children}
             }
         }

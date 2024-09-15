@@ -4,8 +4,9 @@ use dioxus::prelude::*;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct NavProps {
-    children: Option<Element>,
     alignment: Option<NavAlignment>,
+    current_route: IntoRoutable,
+    items: Vec<crate::components::nav::nav_item::NavItem>,
 }
 
 #[component]
@@ -32,10 +33,19 @@ pub fn Nav(props: NavProps) -> Element {
         }
         _ => {}
     }
+    let items = props.items.iter().map(|item| {
+        let item_clone = item.clone();
+        rsx! {
+            crate::components::nav::nav_item::NavItem{
+                to: item_clone.to
+                {item_clone.text}
+            }
+        }
+    });
     rsx! {
         ul{
             class,
-            {props.children}
+            {items}
         }
     }
 }
