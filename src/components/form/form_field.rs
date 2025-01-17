@@ -18,7 +18,7 @@ pub fn FormField(props: FormFieldProps) -> Element {
     let uid = use_uid_generator();
     let label = match props.label {
         None => {
-            None
+            VNode::empty()
         }
         Some(l) => {
             rsx! {

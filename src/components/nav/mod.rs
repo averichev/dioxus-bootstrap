@@ -5,7 +5,7 @@ use dioxus::prelude::*;
 #[derive(PartialEq, Clone, Props)]
 pub struct NavProps {
     alignment: Option<NavAlignment>,
-    current_route: IntoRoutable,
+    current_route: NavigationTarget,
     items: Vec<crate::components::nav::nav_item::NavItem>,
 }
 
@@ -37,7 +37,7 @@ pub fn Nav(props: NavProps) -> Element {
         let item_clone = item.clone();
         rsx! {
             crate::components::nav::nav_item::NavItem{
-                to: item_clone.to
+                to: item_clone.to,
                 {item_clone.text}
             }
         }

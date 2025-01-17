@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 #[derive(Clone)]
-pub(crate) struct ClickListeners {
+pub struct ClickListeners {
     id: Rc<RefCell<Vec<Box<dyn FnMut(Option<String>)>>>>,
 }
 
