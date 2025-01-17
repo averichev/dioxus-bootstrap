@@ -4,10 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-dioxus = {git = "https://github.com/DioxusLabs/dioxus.git", branch = "main", features = ["router", "fullstack"]}
-dioxus-router = "0.6.1"
+dioxus = {git = "https://github.com/DioxusLabs/dioxus.git", features = ["router"]}
 wasm-bindgen = "0.2.100"
-web-sys = {version = "0.3.77", features = ["MouseEvent"]}
+web-sys = {version = "0.3.77", features = ["MouseEvent", "Window", "Element", "Document"]}
 uuid = { version = "1.8.0", features = ["v4"] }
 tracing = "0.1.40"
 once_cell = "1.19.0"

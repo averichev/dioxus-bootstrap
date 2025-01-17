@@ -11,7 +11,7 @@ pub struct ButtonProps {
     #[props(default = false)]
     disabled: bool,
     #[props(default = false)]
-    processing: bool,
+    processing: Option<bool>,
 }
 
 #[component]
@@ -70,7 +70,7 @@ pub fn Button(props: ButtonProps) -> Element {
     // };
 
     let spinner = match props.processing {
-        true => {
+        Some(true) => {
             rsx! {
                 span{
                     class:"spinner-border spinner-border-sm me-1",
@@ -82,7 +82,7 @@ pub fn Button(props: ButtonProps) -> Element {
                 }
             }
         }
-        false => {
+        _ => {
             rsx! {
                 {props.children}
             }
