@@ -16,7 +16,7 @@ pub struct DropdownProps {
 pub fn Dropdown(props: DropdownProps) -> Element {
     let uid = use_uid_generator();
     let mut show = use_signal(|| false);
-    //use_autoclose(show.clone(), uid().to_string());
+    use_autoclose(show.clone(), uid().to_string());
     let on_click = move |_| {
         show.toggle();
     };

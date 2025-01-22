@@ -1,6 +1,7 @@
 use dioxus::prelude::use_drop;
 use crate::models::clicked::ClickListeners;
 use once_cell::unsync::OnceCell;
+use wasm_bindgen::JsCast;
 use web_sys::wasm_bindgen::closure::Closure;
 use web_sys::{window, EventTarget, MouseEvent};
 
@@ -11,19 +12,19 @@ thread_local! {
 
 fn initialize_document_click_listener(clicked: ClickListeners) {
     let closure = Closure::wrap(Box::new(move |evt: MouseEvent| {
-        // let target = evt.target().and_then(|t| t.dyn_into::<EventTarget>().ok());
-        // let id = target.and_then(|t| t.dyn_into::<web_sys::Element>().ok()?.get_attribute("id"));
-        // for callback in clicked.id().borrow_mut().iter_mut() {
-        //     callback(id.clone());
-        // }
+        let target = evt.target().and_then(|t| t.dyn_into::<EventTarget>().ok());
+        let id = target.and_then(|t| t.dyn_into::<web_sys::Element>().ok()?.get_attribute("id"));
+        for callback in clicked.id().borrow_mut().iter_mut() {
+            callback(id.clone());
+        }
     }) as Box<dyn FnMut(_)>);
 
-    // window()
-    //     .unwrap()
-    //     .document()
-    //     .unwrap()
-    //     //.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())
-    //    // .unwrap();
+    window()
+        .unwrap()
+        .document()
+        .unwrap()
+        .add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())
+       .unwrap();
 
     closure.forget();
 }
