@@ -6,7 +6,7 @@ use dioxus::hooks::use_resource;
 pub mod components;
 pub mod hooks;
 pub mod layout;
-pub(crate) mod models;
+pub mod models;
 
 pub mod prelude {
     pub use crate::components::button::*;
@@ -18,7 +18,6 @@ pub mod prelude {
     pub use crate::components::form::*;
     pub use crate::components::nav::nav_item::*;
     pub use crate::components::nav::*;
-    pub use crate::hooks::document_click_listener::*;
     pub use crate::hooks::uid_generator::*;
     pub use crate::layout::col::*;
     pub use crate::layout::row::*;
@@ -26,7 +25,7 @@ pub mod prelude {
 }
 
 pub fn update_body_class(class_name: &str) {
-    let class_name = class_name.to_string(); // Создаем String с "владением"
+    let class_name = class_name.to_string();
     let _ = use_resource(move || {
         let value = class_name.clone();
         async move {
@@ -43,7 +42,7 @@ pub fn update_body_class(class_name: &str) {
 
 
 pub fn update_main_class(class_name: &str) {
-    let class_name = class_name.to_string(); // Создаем String с "владением"
+    let class_name = class_name.to_string();
     let _ = use_resource(move || {
         let value = class_name.clone();
         async move {
@@ -62,7 +61,7 @@ pub fn update_main_class(class_name: &str) {
 }
 
 pub fn update_html_class(class_name: &str) {
-    let class_name = class_name.to_string(); // Создаем String с "владением"
+    let class_name = class_name.to_string();
     let _ = use_resource(move || {
         let value = class_name.clone();
         async move {

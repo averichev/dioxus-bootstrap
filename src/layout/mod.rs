@@ -7,7 +7,7 @@ use dioxus::prelude::*;
 pub struct ContainerProps {
     children: Element,
     breakpoint: Option<ContainerBreakpoint>,
-    class: Option<String>
+    class: Option<String>,
 }
 #[component]
 pub fn Container(props: ContainerProps) -> Element {

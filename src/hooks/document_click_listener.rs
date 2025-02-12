@@ -29,7 +29,7 @@ fn initialize_document_click_listener(clicked: ClickListeners) {
     closure.forget();
 }
 
-pub fn use_document_click_listener() -> ClickListeners {
+pub(crate) fn use_document_click_listener() -> ClickListeners {
     let clicked = LISTENER_INITIALIZED.with(|l| {
         l.get_or_init(|| {
             let clicked = ClickListeners::new();
