@@ -1,11 +1,8 @@
 pub mod dropdown_menu;
 
 use dioxus::prelude::*;
-use tracing::debug;
 use crate::components::button::Button;
-use uuid::Uuid;
 use crate::components::dropdown::dropdown_menu::DropdownMenu;
-use crate::hooks::document_click_listener::use_document_click_listener;
 use crate::hooks::uid_generator::use_uid_generator;
 use crate::hooks::use_autoclose;
 

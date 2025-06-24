@@ -1,11 +1,9 @@
+use dioxus::prelude::use_drop;
 use crate::models::clicked::ClickListeners;
-use dioxus::prelude::*;
 use once_cell::unsync::OnceCell;
-use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
+use web_sys::wasm_bindgen::closure::Closure;
 use web_sys::{window, EventTarget, MouseEvent};
-
-// Глобальная переменная для хранения состояния инициализации
 thread_local! {
  static LISTENER_INITIALIZED: OnceCell<ClickListeners> = OnceCell::new();
 }
@@ -24,13 +22,13 @@ fn initialize_document_click_listener(clicked: ClickListeners) {
         .document()
         .unwrap()
         .add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())
-        .unwrap();
+       .unwrap();
 
     closure.forget();
 }
 
-pub fn use_document_click_listener() -> ClickListeners {
-    let mut clicked = LISTENER_INITIALIZED.with(|l| {
+pub(crate) fn use_document_click_listener() -> ClickListeners {
+    let clicked = LISTENER_INITIALIZED.with(|l| {
         l.get_or_init(|| {
             let clicked = ClickListeners::new();
             initialize_document_click_listener(clicked.clone());
