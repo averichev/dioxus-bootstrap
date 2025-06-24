@@ -4,8 +4,6 @@ use once_cell::unsync::OnceCell;
 use wasm_bindgen::JsCast;
 use web_sys::wasm_bindgen::closure::Closure;
 use web_sys::{window, EventTarget, MouseEvent};
-
-
 thread_local! {
  static LISTENER_INITIALIZED: OnceCell<ClickListeners> = OnceCell::new();
 }
