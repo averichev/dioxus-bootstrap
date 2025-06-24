@@ -5,13 +5,13 @@ pub struct NavItemProps {
     children: Option<Element>,
     #[props(default = false)]
     disabled: bool,
-    to: IntoRoutable,
+    to: NavigationTarget,
 }
 
 #[derive(PartialEq, Clone)]
 pub struct NavItem {
     pub text: String,
-    pub to: IntoRoutable,
+    pub to: NavigationTarget,
 }
 
 #[component]

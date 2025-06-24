@@ -4,15 +4,30 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-dioxus = {version = "0.5.6", features = ["web", "router"]}
-wasm-bindgen = "0.2.92"
-web-sys = {version = "0.3.69"}
-serde_json = "1.0.116"
-getrandom = { version = "0.2", features = ["js"] }
-uuid = { version = "1.8.0", features = ["v4"] }
-modx = "0.1.2"
-dioxus-logger = { version = "0.5.1" }
+dioxus = { version = "0.6.2", features = ["router"] }
+wasm-bindgen = { version = "0.2.100" }
+web-sys = { version = "0.3.77", features = ["MouseEvent", "Window", "Element", "Document", "StorageEvent", "Storage"] }
+uuid = { version = "1.10.0", features = ["v4"] }
 tracing = "0.1.40"
-log = "0.4.22"
 once_cell = "1.19.0"
-slab = "0.4.9"
+libc = "0.2.169"
+getrandom = { version = "0.2.15", features = ["js"] }
+serde = { version = "1.0.198", features = ["derive"] }
+
+[features]
+default = ["web"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"

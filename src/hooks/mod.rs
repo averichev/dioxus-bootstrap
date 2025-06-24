@@ -4,7 +4,7 @@ use crate::hooks::document_click_listener::use_document_click_listener;
 pub mod document_click_listener;
 pub mod uid_generator;
 
-pub fn use_autoclose(mut show: Signal<bool>, uid: String) {
+pub(crate) fn use_autoclose(mut show: Signal<bool>, uid: String) {
     let mut listener = use_document_click_listener();
     use_hook(move || {
         let cur_scope = current_scope_id().unwrap();

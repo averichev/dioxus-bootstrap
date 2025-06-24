@@ -10,7 +10,7 @@ pub struct InvalidFeedbackProps {
 pub fn InvalidFeedback(props: InvalidFeedbackProps) -> Element {
     match props.errors {
         None => {
-            None
+            VNode::empty()
         }
         Some(errors) => {
             rsx! {
