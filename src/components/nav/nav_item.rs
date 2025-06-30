@@ -23,12 +23,8 @@ pub(crate) fn NavItem(props: NavItemProps) -> Element {
     };
     let route = props.to.clone();
     rsx! {
-        li{
-            class: link_class,
-            Link{
-                to: route,
-                {props.children}
-            }
+        li { class: link_class,
+            Link { to: route, {props.children} }
         }
     }
 }

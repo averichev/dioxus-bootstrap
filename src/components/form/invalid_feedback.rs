@@ -14,13 +14,9 @@ pub fn InvalidFeedback(props: InvalidFeedbackProps) -> Element {
         }
         Some(errors) => {
             rsx! {
-                div{
-                    class: "invalid-feedback",
+                div { class: "invalid-feedback",
                     for error in errors {
-                        div {
-                            "data-code": error.code,
-                            "{error.message}"
-                        }
+                        div { "data-code": error.code, "{error.message}" }
                     }
                 }
             }

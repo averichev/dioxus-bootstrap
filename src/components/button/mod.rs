@@ -72,14 +72,11 @@ pub fn Button(props: ButtonProps) -> Element {
     let spinner = match props.processing {
         Some(true) => {
             rsx! {
-                span{
-                    class:"spinner-border spinner-border-sm me-1",
-                    "aria-hidden":"true"
+                span {
+                    class: "spinner-border spinner-border-sm me-1",
+                    "aria-hidden": "true",
                 }
-                span{
-                    "role": "status",
-                    "Loading..."
-                }
+                span { "role": "status", "Loading..." }
             }
         }
         _ => {
@@ -90,7 +87,7 @@ pub fn Button(props: ButtonProps) -> Element {
     };
 
     rsx! {
-        button{
+        button {
             id: props.id,
             class,
             //onclick: on_click,

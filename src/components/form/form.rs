@@ -10,7 +10,7 @@ pub struct FormProps {
 #[component]
 pub fn Form(props: FormProps) -> Element {
     rsx! {
-        form{
+        form {
             onsubmit: move |event| {
                 debug!("Submitted! {event:?}");
                 debug!("{:?}", event.data());

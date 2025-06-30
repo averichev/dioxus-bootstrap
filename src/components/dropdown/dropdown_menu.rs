@@ -20,9 +20,6 @@ pub fn DropdownMenu(props: DropdownMenuProps) -> Element {
         }
     }
     rsx! {
-        ul{
-            class,
-            {props.children}
-        }
+        ul { class, {props.children} }
     }
 }

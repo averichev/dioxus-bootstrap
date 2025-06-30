@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-dioxus = { version = "0.6.2", features = ["router"] }
+dioxus = { version = "0.6.3", features = ["router"] }
 wasm-bindgen = { version = "0.2.100" }
 web-sys = { version = "0.3.77", features = ["MouseEvent", "Window", "Element", "Document", "StorageEvent", "Storage"] }
 uuid = { version = "1.10.0", features = ["v4"] }

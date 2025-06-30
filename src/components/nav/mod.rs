@@ -36,17 +36,11 @@ pub fn Nav(props: NavProps) -> Element {
     let items = props.items.iter().map(|item| {
         let item_clone = item.clone();
         rsx! {
-            crate::components::nav::nav_item::NavItem{
-                to: item_clone.to,
-                {item_clone.text}
-            }
+            crate::components::nav::nav_item::NavItem { to: item_clone.to, {item_clone.text} }
         }
     });
     rsx! {
-        ul{
-            class,
-            {items}
-        }
+        ul { class, {items} }
     }
 }
 

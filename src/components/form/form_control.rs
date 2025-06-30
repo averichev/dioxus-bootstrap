@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::prelude::*;
+use dioxus::prelude::*;
 
 #[derive(Clone, PartialEq, Props)]
 pub struct FormControlProps {
@@ -8,49 +8,80 @@ pub struct FormControlProps {
     placeholder: Option<String>,
     id: Option<String>,
     name: Option<String>,
-    oninput: EventHandler<FormEvent>,
+    oninput: Option<EventHandler<FormEvent>>,
     errors: Option<Vec<FormControlError>>,
     #[props(default = false)]
     readonly: bool,
 }
-
 
 #[component]
 pub fn FormControl(props: FormControlProps) -> Element {
     let data = use_signal(|| "".to_string());
     let mut touched = use_signal(|| false);
     let is_invalid = match props.errors {
-        None => {
-            false
-        }
+        None => false,
         Some(ref v) => {
             if *touched.read() == false {
                 false
-            }
-            else {
+            } else {
                 v.len() > 0
             }
         }
     };
-    rsx! {
-        input {
-            r#type: get_type(props.r#type),
-            class: get_class(props.size, is_invalid),
-            placeholder: props.placeholder,
-            id: props.id,
-            name: props.name,
-            readonly: props.readonly,
-            oninput: move |event| {
-                touched.set(true);
-                props.oninput.call(event);
+
+    let props_type = props.r#type.clone();
+
+    let control = match props.r#type {
+        None => VNode::empty(),
+        Some(control_type) => match control_type {
+            FormControlType::Textarea => {
+                rsx!{
+                    textarea {
+                        class: get_class(props.size, is_invalid),
+                        placeholder: props.placeholder,
+                        id: props.id,
+                        name: props.name,
+                        readonly: props.readonly,
+                        oninput: move |event| {
+                            touched.set(true);
+                            match props.oninput {
+                                None => {}
+                                Some(s) => {
+                                    s.call(event);
+                                }
+                            }
+                        },
+                    }
+                }
             }
-        }
-        InvalidFeedback{
-            errors: props.errors
-        }
-        div{
-            {data}
-        }
+            _ => {
+                rsx! {
+                    input {
+                        r#type: get_type(props_type),
+                        class: get_class(props.size, is_invalid),
+                        placeholder: props.placeholder,
+                        id: props.id,
+                        name: props.name,
+                        readonly: props.readonly,
+                        oninput: move |event| {
+                            touched.set(true);
+                            match props.oninput {
+                                None => {}
+                                Some(s) => {
+                                    s.call(event);
+                                }
+                            }
+                        },
+                    }
+                }
+            }
+        },
+    };
+
+    rsx! {
+        {control}
+        InvalidFeedback { errors: props.errors }
+        div { {data} }
     }
 }
 
@@ -58,30 +89,24 @@ pub fn FormControl(props: FormControlProps) -> Element {
 pub enum FormControlType {
     Text,
     Checkbox,
+    Email,
+    Textarea,
 }
-
 
 fn get_class(control_size: Option<FormControlSize>, is_invalid: bool) -> String {
     let mut class = String::from("form-control");
     match control_size {
         None => {}
-        Some(n) => {
-            match n {
-                FormControlSize::Sm => {
-                    class.push_str(" form-control-sm")
-                }
-                FormControlSize::Default => {}
-                FormControlSize::Lg => {
-                    class.push_str(" form-control-lg")
-                }
-            }
-        }
+        Some(n) => match n {
+            FormControlSize::Sm => class.push_str(" form-control-sm"),
+            FormControlSize::Default => {}
+            FormControlSize::Lg => class.push_str(" form-control-lg"),
+        },
     };
 
     if is_invalid == true {
         class.push_str(" is-invalid")
-    }
-    else {
+    } else {
         class.push_str(" ")
     }
 
@@ -90,23 +115,16 @@ fn get_class(control_size: Option<FormControlSize>, is_invalid: bool) -> String 
 
 fn get_type(control_type: Option<FormControlType>) -> String {
     let t = match control_type {
-        None => {
-            "text"
-        }
-        Some(n) => {
-            match n {
-                FormControlType::Text => {
-                    "text"
-                }
-                FormControlType::Checkbox => {
-                    "checkbox"
-                }
-            }
-        }
+        None => "text",
+        Some(n) => match n {
+            FormControlType::Text => "text",
+            FormControlType::Checkbox => "checkbox",
+            FormControlType::Email => "email",
+            FormControlType::Textarea => "textarea",
+        },
     };
     t.to_string()
 }
-
 
 #[derive(Clone, PartialEq)]
 pub enum FormControlSize {

@@ -46,10 +46,7 @@ pub fn Container(props: ContainerProps) -> Element {
         }
     }
     rsx! {
-        div{
-            class,
-            {props.children}
-        }
+        div { class, {props.children} }
     }
 }
 
