@@ -8,9 +8,6 @@ pub struct RowProps {
 #[component]
 pub fn Row(props: RowProps) -> Element {
     rsx! {
-        div{
-            class: "row",
-            {props.children}
-        }
+        div { class: "row", {props.children} }
     }
 }

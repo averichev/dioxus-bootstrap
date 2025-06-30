@@ -22,18 +22,14 @@ pub fn Dropdown(props: DropdownProps) -> Element {
     };
 
     rsx! {
-        div{
-            class: "dropdown",
-            Button{
+        div { class: "dropdown",
+            Button {
                 class: "dropdown-toggle",
                 on_click,
                 id: uid().to_string(),
                 {props.children}
             }
-            DropdownMenu{
-                children: props.menu,
-                show: Some(*show.read())
-            }
+            DropdownMenu { children: props.menu, show: Some(*show.read()) }
         }
     }
 }
