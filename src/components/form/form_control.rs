@@ -31,51 +31,50 @@ pub fn FormControl(props: FormControlProps) -> Element {
 
     let props_type = props.r#type.clone();
 
-    let control = match props.r#type {
-        None => VNode::empty(),
-        Some(control_type) => match control_type {
-            FormControlType::Textarea => {
-                rsx!{
-                    textarea {
-                        class: get_class(props.size, is_invalid),
-                        placeholder: props.placeholder,
-                        id: props.id,
-                        name: props.name,
-                        readonly: props.readonly,
-                        oninput: move |event| {
-                            touched.set(true);
-                            match props.oninput {
-                                None => {}
-                                Some(s) => {
-                                    s.call(event);
-                                }
+    let control_type = props.r#type.unwrap_or_else(|| FormControlType::Text);
+
+    let control = match control_type {
+        FormControlType::Textarea => {
+            rsx! {
+                textarea {
+                    class: get_class(props.size, is_invalid),
+                    placeholder: props.placeholder,
+                    id: props.id,
+                    name: props.name,
+                    readonly: props.readonly,
+                    oninput: move |event| {
+                        touched.set(true);
+                        match props.oninput {
+                            None => {}
+                            Some(s) => {
+                                s.call(event);
                             }
-                        },
-                    }
+                        }
+                    },
                 }
             }
-            _ => {
-                rsx! {
-                    input {
-                        r#type: get_type(props_type),
-                        class: get_class(props.size, is_invalid),
-                        placeholder: props.placeholder,
-                        id: props.id,
-                        name: props.name,
-                        readonly: props.readonly,
-                        oninput: move |event| {
-                            touched.set(true);
-                            match props.oninput {
-                                None => {}
-                                Some(s) => {
-                                    s.call(event);
-                                }
+        }
+        _ => {
+            rsx! {
+                input {
+                    r#type: get_type(props_type),
+                    class: get_class(props.size, is_invalid),
+                    placeholder: props.placeholder,
+                    id: props.id,
+                    name: props.name,
+                    readonly: props.readonly,
+                    oninput: move |event| {
+                        touched.set(true);
+                        match props.oninput {
+                            None => {}
+                            Some(s) => {
+                                s.call(event);
                             }
-                        },
-                    }
+                        }
+                    },
                 }
             }
-        },
+        }
     };
 
     rsx! {
